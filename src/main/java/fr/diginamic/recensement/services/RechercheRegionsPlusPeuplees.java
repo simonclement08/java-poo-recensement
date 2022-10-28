@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import fr.diginamic.recensement.entites.Recensement;
 import fr.diginamic.recensement.entites.Region;
 import fr.diginamic.recensement.entites.Ville;
+import fr.diginamic.recensement.exceptions.MenuServiceException;
 import fr.diginamic.recensement.services.comparators.EnsemblePopComparateur;
 
 /**
@@ -21,10 +24,18 @@ import fr.diginamic.recensement.services.comparators.EnsemblePopComparateur;
 public class RechercheRegionsPlusPeuplees extends MenuService {
 
 	@Override
-	public void traiter(Recensement recensement, Scanner scanner) {
+	public void traiter(Recensement recensement, Scanner scanner) throws MenuServiceException {
 
 		System.out.println("Veuillez saisir un nombre de régions:");
 		String nbRegionsStr = scanner.nextLine();
+		
+		if (!NumberUtils.isDigits(nbRegionsStr)) {
+			throw new MenuServiceException("Veuillez saisir un nombre");
+		}
+		if (Integer.parseInt(nbRegionsStr) < 1) {
+			throw new MenuServiceException("Veuillez saisir un nombre plus grand que 0");
+		}
+		
 		int nbRegions = Integer.parseInt(nbRegionsStr);
 
 		// On récupére la liste des villes du recensement
